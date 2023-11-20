@@ -52,14 +52,6 @@ ALTER TABLE utilisateurs
 ADD COLUMN squad_id SMALLINT UNSIGNED,
 ADD FOREIGN KEY (squad_id) REFERENCES squads(id);
 
-CREATE TABLE squad_ressources (
-    squad_id SMALLINT UNSIGNED NOT NULL,
-    ressource_id SMALLINT UNSIGNED NOT NULL,
-    PRIMARY KEY (squad_id, ressource_id),
-    FOREIGN KEY (squad_id) REFERENCES squads (id),
-    FOREIGN KEY (ressource_id) REFERENCES ressources (id)
-) ENGINE = InnoDB;
-
 CREATE TABLE projet_ressources (
     projet_id SMALLINT UNSIGNED NOT NULL,
     ressource_id SMALLINT UNSIGNED NOT NULL,
@@ -249,10 +241,6 @@ CALL ListSquadProjects(2);
 
 INSERT INTO ressources (nom_ressource, description)
 VALUES ('Nom de la Ressource', 'Description de la Ressource');
-
--- Associer avec un squad
-INSERT INTO squad_ressources (squad_id, ressource_id)
-VALUES (1, LAST_INSERT_ID());
 
 -- Associer avec un projet
 INSERT INTO projet_ressources (projet_id, ressource_id)
