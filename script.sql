@@ -2,80 +2,71 @@
 
 -- Création de de la base de données
 
-CREATE DATABASE MyResources 
+CREATE DATABASE MyResources;
 
 -- Création des tables
 
-CREATE TABLE
-    utilisateurs (
-        id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        nom_utilisateur VARCHAR(30) NOT NULL,
-        email VARCHAR(50) NOT NULL,
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE utilisateurs (
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nom_utilisateur VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
 
-CREATE TABLE
-    squads (
-        id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nom_squad VARCHAR(30) NOT NULL,
-        leader_id SMALLINT UNSIGNED NOT NULL,
-        FOREIGN KEY (leader_id) REFERENCES utilisateurs (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE squads (
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nom_squad VARCHAR(30) NOT NULL,
+    leader_id SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY (leader_id) REFERENCES utilisateurs (id)
+) ENGINE = InnoDB;
 
-CREATE TABLE
-    projets (
-        id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nom_projet VARCHAR(30) NOT NULL,
-        description VARCHAR(30) NOT NULL,
-        date_debut DATE,
-        date_fin DATE,
-        squad_id SMALLINT UNSIGNED NOT NULL,
-        FOREIGN KEY (squad_id) REFERENCES squads (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE projets (
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nom_projet VARCHAR(30) NOT NULL,
+    description VARCHAR(30) NOT NULL,
+    date_debut DATE,
+    date_fin DATE,
+    squad_id SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY (squad_id) REFERENCES squads (id)
+) ENGINE = InnoDB;
 
-CREATE TABLE
-    ressources (
-        id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nom_ressource VARCHAR(30) NOT NULL,
-        description VARCHAR(30) NOT NULL
-    ) ENGINE = InnoDB;
+CREATE TABLE ressources (
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nom_ressource VARCHAR(30) NOT NULL,
+    description VARCHAR(30) NOT NULL
+) ENGINE = InnoDB;
 
-@ext: esbenp.prettier - vscode
-CREATE TABLE
-    categories (
-        id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nom_categorie VARCHAR(30) NOT NULL
-    ) ENGINE = InnoDB;
+CREATE TABLE categories (
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nom_categorie VARCHAR(30) NOT NULL
+) ENGINE = InnoDB;
 
-CREATE TABLE
-    souscategories (
-        id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nom_souscategorie VARCHAR(30) NOT NULL,
-        categorie_id SMALLINT UNSIGNED NOT NULL,
-        FOREIGN KEY (categorie_id) REFERENCES categories (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE souscategories (
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nom_souscategorie VARCHAR(30) NOT NULL,
+    categorie_id SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY (categorie_id) REFERENCES categories (id)
+) ENGINE = InnoDB;
 
 ALTER TABLE utilisateurs
 ADD COLUMN squad_id SMALLINT UNSIGNED,
 ADD FOREIGN KEY (squad_id) REFERENCES squads(id);
 
-CREATE TABLE
-    squad_ressources (
-        squad_id SMALLINT UNSIGNED NOT NULL,
-        ressource_id SMALLINT UNSIGNED NOT NULL,
-        PRIMARY KEY (squad_id, ressource_id),
-        FOREIGN KEY (squad_id) REFERENCES squads (id),
-        FOREIGN KEY (ressource_id) REFERENCES ressources (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE squad_ressources (
+    squad_id SMALLINT UNSIGNED NOT NULL,
+    ressource_id SMALLINT UNSIGNED NOT NULL,
+    PRIMARY KEY (squad_id, ressource_id),
+    FOREIGN KEY (squad_id) REFERENCES squads (id),
+    FOREIGN KEY (ressource_id) REFERENCES ressources (id)
+) ENGINE = InnoDB;
 
-CREATE TABLE
-    projet_ressources (
-        projet_id SMALLINT UNSIGNED NOT NULL,
-        ressource_id SMALLINT UNSIGNED NOT NULL,
-        PRIMARY KEY (projet_id, ressource_id),
-        FOREIGN KEY (projet_id) REFERENCES projets (id),
-        FOREIGN KEY (ressource_id) REFERENCES ressources (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE projet_ressources (
+    projet_id SMALLINT UNSIGNED NOT NULL,
+    ressource_id SMALLINT UNSIGNED NOT NULL,
+    PRIMARY KEY (projet_id, ressource_id),
+    FOREIGN KEY (projet_id) REFERENCES projets (id),
+    FOREIGN KEY (ressource_id) REFERENCES ressources (id)
+) ENGINE = InnoDB;
 
 ALTER TABLE ressources
 ADD COLUMN souscategorie_id SMALLINT UNSIGNED,
@@ -144,17 +135,17 @@ CALL AddUser('Soumaya Ait Lmqaddam', 'soumiatinghir119@gmail.com');
 
 CALL AddUser('Youness Erbai', 'younesserbai@gmail.com');
 
--- En tant que leader de squad, je souhaite créer un nouveau squad, spécifiant le nom et ajoutant des membres à ce squad, pour former rapidement des équipes dédiées à des projets spécifiques.
+-- En tant que leader de squad, je souhaite créer un nouveau squad, spécifiant le nom et ajoutant des membres à ce squad,
+-- pour former rapidement des équipes dédiées à des projets spécifiques.
 
 -- Création des squads
-
 INSERT INTO squads (nom_squad, leader_id)
 VALUES
-('Brogrammers', 12),
-('ProDevs', 14),
-('CODEZILLA', 4),
-('cell13', 1),
-('Alpha', 3);
+    ('Brogrammers', 12),
+    ('ProDevs', 14),
+    ('CODEZILLA', 4),
+    ('cell13', 1),
+    ('Alpha', 3);
 
 -- Ajouter les membres
 
@@ -200,7 +191,8 @@ WHERE
     OR id = 13
     OR id = 9;
 
--- En tant que chef de projet, je veux créer un nouveau projet en fournissant des détails tels que le nom, la description et les dates, pour définir clairement les paramètres de chaque projet.
+-- En tant que chef de projet, je veux créer un nouveau projet en fournissant des détails tels que le nom, la description et les dates,
+-- pour définir clairement les paramètres de chaque projet.
 
 INSERT INTO projets (
     nom_projet,
@@ -235,7 +227,9 @@ DELIMITER ;
 
 CALL CreateNewProject('Projet 2', 'Lorem ipsum', '2023-01-01', '2023-12-31', 2);
 
--- En tant que membre de squad, je veux voir la liste des projets pour lesquels mon squad est responsable pour comprendre les projets actuels et suivre les responsabilités.
+-- En tant que membre de squad, je veux voir la liste des projets pour lesquels mon squad est responsable
+-- pour comprendre les projets actuels et suivre les responsabilités.
+
 DELIMITER //
 
 CREATE PROCEDURE ListSquadProjects(
@@ -250,7 +244,9 @@ DELIMITER ;
 
 CALL ListSquadProjects(2);
 
--- En tant que responsable des ressources, je veux ajouter une nouvelle ressource en spécifiant son nom, sa catégorie, sa sous-catégorie et son association éventuelle à un squad ou à un projet, pour gérer efficacement les ressources disponibles.
+-- En tant que responsable des ressources, je veux ajouter une nouvelle ressource en spécifiant son nom, sa catégorie,
+-- sa sous-catégorie et son association éventuelle à un squad ou à un projet, pour gérer efficacement les ressources disponibles.
+
 INSERT INTO ressources (nom_ressource, description)
 VALUES ('Nom de la Ressource', 'Description de la Ressource');
 
@@ -262,7 +258,9 @@ VALUES (1, LAST_INSERT_ID());
 INSERT INTO projet_ressources (projet_id, ressource_id)
 VALUES (1, LAST_INSERT_ID());
 
--- En tant que développeur Fullstack, je veux pouvoir mettre à jour les détails d'un utilisateur, d'un squad, d'un projet ou d'une ressource existante pour ajuster les informations en fonction des évolutions.
+-- En tant que développeur Fullstack, je veux pouvoir mettre à jour les détails d'un utilisateur, d'un squad,
+-- d'un projet ou d'une ressource existante pour ajuster les informations en fonction des évolutions.
+
 UPDATE utilisateurs
 SET nom_utilisateur = 'Nouveau nom d utilisateur'
 WHERE id = 1;
@@ -292,7 +290,8 @@ END //
 
 DELIMITER ;
 
--- En tant que responsable des catégories et sous-catégories, je souhaite créer de nouvelles catégories et sous-catégories pour classer les ressources et organiser efficacement la base de données.
+-- En tant que responsable des catégories et sous-catégories, je souhaite créer de nouvelles catégories et sous-catégories
+-- pour classer les ressources et organiser efficacement la base de données.
 DELIMITER //
 CREATE PROCEDURE createCategory (IN categoryName VARCHAR(30))
 BEGIN
