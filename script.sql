@@ -300,3 +300,22 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- Afficher les ressources associées à un projet particulier :
+SELECT *
+FROM projet_ressources
+WHERE projet_id = 1;
+
+-- Afficher les noms des membres de chaque squad
+SELECT s.nom_squad, u.nom_utilisateur
+FROM squads s, utilisateurs u
+WHERE s.id = u.squad_id
+ORDER BY s.nom_squad, u.nom_utilisateur;
+
+-- Affichage des squads et du nombre de membres dans chaque squad, trié par nombre de membres décroissant :
+SELECT s.nom_squad, COUNT(u.id) AS nombre_de_membres
+FROM squads s
+LEFT JOIN utilisateurs u ON s.id = u.squad_id
+GROUP BY s.nom_squad
+ORDER BY nombre_de_membres DESC;
+
